@@ -7,6 +7,10 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
+
+final _formkey = GlobalKey<FormState>();
+String  _username, _email, _password;
+
 Widget _showTitle() {
   return Text('Register', style: Theme.of(context).textTheme.headline5,);
 
@@ -16,6 +20,8 @@ Widget _showUsernameInput() {
   return Padding(
     padding: EdgeInsets.only(top: 20.0),
     child: TextFormField(
+      onSaved: (val) => _username = val,
+      validator: (val) => val.length <6? 'Username too short': null ,
       decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Username',
@@ -28,6 +34,9 @@ Widget _showUsernameInput() {
     return  Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
+        onSaved: (val) => _email = val,
+
+        validator: (val) => !val.contains('@') ?'Invalid Email': null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Email',
@@ -40,6 +49,10 @@ Widget _showUsernameInput() {
   return  Padding(
     padding: EdgeInsets.only(top: 20.0),
     child: TextFormField(
+      onSaved: (val) => _password = val,
+
+      validator: (val) => val.length <6? 'Username too short': null ,
+
       obscureText: true,
       decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -67,15 +80,23 @@ Widget _showFormActions(){
               borderRadius:
               BorderRadius.all(Radius.circular(10.0))),
           color: Theme.of(context).primaryColor,
-          onPressed: () => print('submit'),
+          onPressed: _submit
         ),
         FlatButton(
           child: Text('Existing User? Login'),
-          onPressed: () => print('Login'),
-        )
+          onPressed: () => Navigator.pushReplacementNamed(context, '/login') ),
+
       ],
     ),
   );
+}
+void _submit(){
+final form = _formkey.currentState;
+if (form.validate()){
+form.save();
+    print('username: $_username, Email: $_email, Password:$_password');
+
+  }
 }
  @override
   Widget build(BuildContext context) {
@@ -90,6 +111,7 @@ Widget _showFormActions(){
         child: Center(
           child: SingleChildScrollView(
             child: Form(
+              key: _formkey,
                 child: Column(
               children: [
                 _showTitle(),
