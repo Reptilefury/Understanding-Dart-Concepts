@@ -9,6 +9,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
 
 final _formkey = GlobalKey<FormState>();
+bool _obscureText = true;
 String  _username, _email, _password;
 
 Widget _showTitle() {
@@ -55,6 +56,14 @@ Widget _showUsernameInput() {
 
       obscureText: true,
       decoration: InputDecoration(
+          suffixIcon: GestureDetector(
+            onTap: () {
+              setState(() => !_obscureText);
+            },
+            child:
+            Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+          ),
+
           border: OutlineInputBorder(),
           labelText: 'Password',
           hintText: 'Enter password, min length 6 ',
